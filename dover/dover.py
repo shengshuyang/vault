@@ -30,6 +30,17 @@ def encode_employment_status(row):
     else:
         return '5plus'
 
+def encode_company(val):
+    if val == 10000:
+        return 'unknown'
+    else:
+        return str(val // 4 + 1)
+
+def encode_school(val):
+    if val == 10000:
+        return 'unknown'
+    else:
+        return str(val // 2 + 1)
 
 # TODO F_Industry isn't very usable
 with open('data-science-challenge-data.json') as f:
@@ -45,7 +56,9 @@ with open('data-science-challenge-data.json') as f:
         for key in ['educations', 'F_Industry', 'f_scores', 'positions', 'currently_employed']:
             if key in row:
                 del row[key]
-
+        row['F_Co'] = encode_company(row['F_Co'])
+        row['F_School'] = encode_school(row['F_School'])
+        row['F_GradSchool'] = encode_school(row['F_GradSchool'])
         data.append(row)
 
 # %% fill nulls
@@ -107,19 +120,20 @@ pipe.fit(X_train, y_train)
 y_test_pred = pipe.predict(X_test)
 y_train_pred = pipe.predict(X_train)
 # %% plot auc roc
-from sklearn.metrics import accuracy_score, roc_auc_score
+from sklearn.metrics import accuracy_score, roc_auc_score, f1_score
 from sklearn.metrics import roc_curve
 
 fpr, tpr, _ = roc_curve(y_test, y_test_pred)
 auc_test = roc_auc_score(y_test, y_test_pred)
 acc_test = accuracy_score(y_test, y_test_pred)
+f1_score = f1_score(y_test, y_test_pred)
 plt.figure()
 plt.plot(fpr, tpr, color='darkorange')
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title(f'ROC curve (auc = {auc_test}, accuracy = {acc_test})')
+plt.title(f'ROC curve (auc = {auc_test}, accuracy = {acc_test}, f1_score = {f1_score})')
 
 plt.show()
 
