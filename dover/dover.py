@@ -107,18 +107,26 @@ X_train, X_test, y_train, y_test = \
 
 # %% training a simple svm classifier
 from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 pipe = Pipeline([
     ('scaler', StandardScaler()),
-    ('svc', LinearSVC(C=1.0e-2, penalty='l1', dual=False, loss='squared_hinge', class_weight='balanced'))
+    # ('svc', LinearSVC(C=1.0e-2, penalty='l1', dual=False, loss='squared_hinge', class_weight='balanced')),
+    ('svc', LogisticRegression(C=1.0e-2, penalty='l1', solver='liblinear', dual=False, class_weight='balanced')),
 ])
 
 pipe.fit(X_train, y_train)
 
 # %% scoring
 y_test_pred = pipe.predict(X_test)
-y_train_pred = pipe.predict(X_train)
+y_test_prob = pipe.predict_proba(X_test)
+
+plt.hist(y_test_prob[y_test == 1][:, 1], bins=30, alpha=1.0, label='positive', log=True, density=True)
+plt.hist(y_test_prob[y_test == 0][:, 1], bins=30, alpha=0.5, label='negative', log=True, density=True)
+plt.legend(loc='upper right')
+plt.title('Score histogram by class')
+plt.show()
 # %% plot auc roc
 from sklearn.metrics import accuracy_score, roc_auc_score, f1_score
 from sklearn.metrics import roc_curve
