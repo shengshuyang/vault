@@ -1,8 +1,8 @@
-# %% loading data
-import urllib.request
+# # %% loading data
+# import urllib.request
 
-url = 'http://storage.googleapis.com/dover-ml-pub/data-science-challenge-data.json'
-response = urllib.request.urlopen(url)
+# url = 'http://storage.googleapis.com/dover-ml-pub/data-science-challenge-data.json'
+# response = urllib.request.urlopen(url)
 
 # %% json parsing
 import pandas as pd
