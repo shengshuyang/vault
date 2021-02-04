@@ -113,7 +113,7 @@ from sklearn.pipeline import Pipeline
 pipe = Pipeline([
     ('scaler', StandardScaler()),
     # ('svc', LinearSVC(C=1.0e-2, penalty='l1', dual=False, loss='squared_hinge', class_weight='balanced')),
-    ('svc', LogisticRegression(C=1.0e-2, penalty='l1', solver='liblinear', dual=False, class_weight='balanced')),
+    ('svc', LogisticRegression(C=1.0e-2, penalty='l1', solver='liblinear', dual=False, class_weight='balanced'))
 ])
 
 pipe.fit(X_train, y_train)
